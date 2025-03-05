@@ -7,10 +7,6 @@ class DataBricks extends BaseLLM {
 
     static providerName = "databricks_api";
 
-    static defaultOptions: Partial<LLMOptions> = {
-        apiBase: "https://dbc-088fc0f5-68f1.cloud.databricks.com/",
-    };
-
     private _convertArgs(options: CompletionOptions, prompt: string) {
         const finalOptions = {
             max_tokens: 512,
@@ -37,7 +33,7 @@ class DataBricks extends BaseLLM {
             ...this.requestOptions?.headers,
         };
 
-        const resp = await this.fetch(new URL("serving-endpoints/databricks-meta-llama-3-3-70b-instruct/invocations", this.apiBase), {
+        const resp = await this.fetch(new URL(this.apiBase || ""), {
             method: "POST",
             headers,
             body: JSON.stringify({
