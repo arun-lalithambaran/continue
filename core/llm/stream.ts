@@ -112,3 +112,12 @@ export async function* streamJSON(response: Response): AsyncGenerator<any> {
     }
   }
 }
+
+export async function* streamDataBricksJSON(response: Response): AsyncGenerator<any> {
+  for await (const value of streamResponse(response)) {
+    const data = JSON.parse(value);
+    for (const choice of data.choices) {
+      yield choice.message;
+    }
+  }
+}

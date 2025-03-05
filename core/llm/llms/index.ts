@@ -28,6 +28,7 @@ import HuggingFaceInferenceAPI from "./HuggingFaceInferenceAPI";
 import HuggingFaceTGI from "./HuggingFaceTGI";
 import Kindo from "./Kindo";
 import LlamaCpp from "./LlamaCpp";
+import DataBricks from "./DataBricks";
 import Llamafile from "./Llamafile";
 import LMStudio from "./LMStudio";
 import Mistral from "./Mistral";
@@ -71,6 +72,7 @@ export const LLMClasses = [
   HuggingFaceInferenceAPI,
   Kindo,
   LlamaCpp,
+  DataBricks,
   OpenAI,
   LMStudio,
   Mistral,
