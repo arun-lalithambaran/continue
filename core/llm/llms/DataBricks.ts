@@ -1,11 +1,12 @@
 import { CompletionOptions, LLMOptions } from "../../index.js";
 import { BaseLLM } from "../index.js";
-import { streamDataBricksJSON } from "../stream.js";
+import { streamDataBricksJSON, streamDataBricksSse } from "../stream.js";
 
 
 class DataBricks extends BaseLLM {
 
     static providerName = "databricks_api";
+    stream = true;
 
     private _convertArgs(options: CompletionOptions, prompt: string) {
         const finalOptions = {
@@ -40,14 +41,22 @@ class DataBricks extends BaseLLM {
                 messages: [
                     { "role": "user", "content": prompt }
                 ],
-                stream: false,
+                stream: this.stream,
                 ...this._convertArgs(options, prompt),
             }),
             signal,
         });
-        for await (const value of streamDataBricksJSON(resp)) {
-            if (value.content) {
-                yield value.content;
+        if (this.stream) {
+            for await (const value of streamDataBricksSse(resp)) {
+                if (value.content) {
+                    yield value.content;
+                }
+            }
+        } else {
+            for await (const value of streamDataBricksJSON(resp)) {
+                if (value.content) {
+                    yield value.content;
+                }
             }
         }
     }
