@@ -83,6 +83,36 @@ export const providers: Partial<Record<string, ProviderInfo>> = {
     ],
     apiKeyUrl: "https://platform.openai.com/account/api-keys",
   },
+  databricks: {
+    title: "DataBricks API",
+    provider: "databricks_api",
+    description: "Any model deployed on databricks",
+    longDescription:
+      "Contact admin to obtain an API key.",
+    icon: "openai.png",
+    tags: [ModelProviderTags.RequiresApiKey],
+    packages: [
+      models.llama3370BChat,
+    ],
+    collectInputFor: [
+      {
+        inputType: "text",
+        key: "apiBase",
+        label: "API Base url",
+        placeholder: "Enter the API base url",
+        required: true
+      },
+      {
+        inputType: "text",
+        key: "apiKey",
+        label: "API Key",
+        placeholder: "Enter your OpenAI API key",
+        required: true,
+      },
+      ...completionParamsInputsConfigs,
+    ],
+    apiKeyUrl: "https://platform.openai.com/account/api-keys",
+  },
   anthropic: {
     title: "Anthropic",
     provider: "anthropic",

@@ -112,6 +112,31 @@ export const models: { [key: string]: ModelPackage } = {
     providerOptions: ["novita"],
     isOpenSource: true,
   },
+  llama3370BChat: {
+    title: "Llama 3.3 70B",
+    description: "A model from Meta, fine-tuned for chat",
+    refUrl: "",
+    params: {
+      title: "Llama3.3-70b",
+      model: "databricks-meta-llama-3-3-70b-instruct",
+      contextLength: 8192,
+    },
+    icon: "meta.png",
+    dimensions: [
+      {
+        name: "Parameter Count",
+        description: "The number of parameters in the model",
+        options: {
+          "70b": {
+            model: "databricks-meta-llama-3-3-70b-instruct",
+            title: "Llama3.3-70b",
+          },
+        },
+      },
+    ],
+    providerOptions: ["databricks_api"],
+    isOpenSource: true,
+  },
   mistralChat: {
     title: "Mistral Chat",
     description:

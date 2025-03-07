@@ -190,6 +190,7 @@
             "lmstudio",
             "llamafile",
             "mistral",
+            "databricks_api",
             "deepinfra",
             "groq",
             "fireworks",
@@ -235,6 +236,7 @@
             "### Llamafile\nTo get started with llamafiles, find and download a binary on their [GitHub repo](https://github.com/Mozilla-Ocho/llamafile#binary-instructions). Then run it with the following command:\n\n```shell\nchmod +x ./llamafile\n./llamafile\n```\n> [Reference](https://docs.continue.dev/reference/Model%20Providers/llamafile)",
             "### Mistral API\n\nTo get access to the Mistral API, obtain your API key from the [Mistral platform](https://docs.mistral.ai/)",
             "### Mistral API on Vertex AI\nTo get started you need to enable the [Vertex AI API](https://console.cloud.google.com/marketplace/product/google/aiplatform.googleapis.com) and set up the [Google Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc).",
+            "### Databricks hosted models\nTo get started you need to get an api key.",
             "### DeepInfra\n\n> [Reference](https://docs.continue.dev/reference/Model%20Providers/deepinfra)",
             "### Groq\nGroq provides extremely fast inference of open-source language models. To get started, obtain an API key from [their console](https://console.groq.com/keys).",
             "### Fireworks\nFireworks is a fast inference engine for open-source language models. To get started, obtain an API key from [their console](https://fireworks.ai/api-keys).",
@@ -479,6 +481,7 @@
                   "cohere",
                   "gemini",
                   "huggingface-inference-api",
+                  "databricks_api",
                   "replicate",
                   "together",
                   "novita",
@@ -514,7 +517,7 @@
           "if": {
             "properties": {
               "provider": {
-                "enum": ["huggingface-tgi", "huggingface-inference-api"]
+                "enum": ["huggingface-tgi", "huggingface-inference-api", "databricks_api"]
               }
             }
           },
@@ -725,6 +728,25 @@
                   "claude-3-5-sonnet-latest",
                   "claude-3-haiku-20240307",
                   "AUTODETECT"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "provider": {
+                "enum": ["databricks_api"]
+              }
+            },
+            "required": ["provider"]
+          },
+          "then": {
+            "properties": {
+              "model": {
+                "enum": [
+                  "databricks-meta-llama-3-3-70b-instruct"
                 ]
               }
             }
