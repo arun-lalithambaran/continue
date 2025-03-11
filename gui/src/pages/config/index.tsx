@@ -57,7 +57,7 @@ function ConfigPage() {
       <PageHeader onTitleClick={() => navigate("/")} title="Chat" />
 
       <div className="divide-x-0 divide-y-2 divide-solid divide-zinc-700 px-4">
-        <div className="flex flex-col">
+        {/* <div className="flex flex-col">
           <div className="flex max-w-[400px] flex-col gap-4 py-4">
             <h2 className="mb-1 mt-0">Account</h2>
             {!session ? (
@@ -93,7 +93,7 @@ function ConfigPage() {
               </div>
             )}
           </div>
-        </div>
+        </div> */}
 
         <div className="flex flex-col">
           <div className="flex max-w-[400px] flex-col gap-4 py-6">
@@ -137,7 +137,7 @@ function ConfigPage() {
                               </span>
                             </Listbox.Option>
                           ))}
-                          {hubEnabled && (
+                          {/* {hubEnabled && (
                             <Listbox.Option
                               key={"no-profiles"}
                               value={null}
@@ -154,7 +154,7 @@ function ConfigPage() {
                                 Create new Assistant
                               </span>
                             </Listbox.Option>
-                          )}
+                          )} */}
                         </Listbox.Options>
                       </Transition>
                     </div>

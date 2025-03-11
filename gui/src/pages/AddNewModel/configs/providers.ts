@@ -84,7 +84,7 @@ export const providers: Partial<Record<string, ProviderInfo>> = {
     apiKeyUrl: "https://platform.openai.com/account/api-keys",
   },
   databricks: {
-    title: "DataBricks API",
+    title: "DataBricks",
     provider: "databricks_api",
     description: "Any model deployed on databricks",
     longDescription:

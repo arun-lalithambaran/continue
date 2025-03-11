@@ -31,7 +31,7 @@ function AddModelForm({
   hideFreeTrialLimitMessage,
 }: QuickModelSetupProps) {
   const [selectedProvider, setSelectedProvider] = useState<ProviderInfo>(
-    providers["openai"]!,
+    providers["databricks"]!,
   );
 
   const [selectedModel, setSelectedModel] = useState(
@@ -43,16 +43,11 @@ function AddModelForm({
   const ideMessenger = useContext(IdeMessengerContext);
 
   const popularProviderTitles = [
-    providers["openai"]?.title || "",
-    providers["anthropic"]?.title || "",
-    providers["mistral"]?.title || "",
-    providers["gemini"]?.title || "",
-    providers["azure"]?.title || "",
-    providers["ollama"]?.title || "",
+    providers["databricks"]?.title || ""
   ];
 
   const allProviders = Object.entries(providers)
-    .filter(([key]) => !["freetrial", "openai-aiohttp"].includes(key))
+    .filter(([key]) => "databricks".includes(key))
     .map(([, provider]) => provider)
     .filter((provider) => !!provider)
     .map((provider) => provider!); // for type checking
@@ -161,18 +156,6 @@ function AddModelForm({
                 topOptions={popularProviders}
                 otherOptions={otherProviders}
               />
-              <InputSubtext className="mb-0">
-                Don't see your provider?{" "}
-                <a
-                  className="cursor-pointer text-inherit underline hover:text-inherit"
-                  onClick={() =>
-                    ideMessenger.post("openUrl", MODEL_PROVIDERS_URL)
-                  }
-                >
-                  Click here
-                </a>{" "}
-                to view the full list
-              </InputSubtext>
             </div>
 
             {selectedProvider.downloadUrl && (
@@ -240,22 +223,6 @@ function AddModelForm({
                     placeholder={`Enter your ${selectedProvider.title} API key`}
                     {...formMethods.register("apiKey")}
                   />
-                  <InputSubtext className="mb-0">
-                    <a
-                      className="cursor-pointer text-inherit underline hover:text-inherit"
-                      onClick={() => {
-                        if (selectedProviderApiKeyUrl) {
-                          ideMessenger.post(
-                            "openUrl",
-                            selectedProviderApiKeyUrl,
-                          );
-                        }
-                      }}
-                    >
-                      Click here
-                    </a>{" "}
-                    to create a {selectedProvider.title} API key
-                  </InputSubtext>
                 </>
               </div>
             )}

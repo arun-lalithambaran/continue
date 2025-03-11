@@ -38,7 +38,7 @@ const ErrorPage: React.FC = () => {
         {error.statusText || error.message}
       </code>
 
-      <Button
+      {/* <Button
         className="flex flex-row items-center gap-2"
         onClick={() => {
           dispatch(newSession());
@@ -59,9 +59,9 @@ const ErrorPage: React.FC = () => {
 
       <p className="mb-0 mt-6 text-lg">
         Report the issue on GitHub or Discord:
-      </p>
+      </p> */}
 
-      <div className="flex space-x-4">
+      {/* <div className="flex space-x-4">
         <SecondaryButton
           onClick={() => openUrl(GITHUB_LINK)}
           className="flex w-full items-center justify-center space-x-2 rounded-lg px-4 py-2 text-base text-white"
@@ -74,7 +74,7 @@ const ErrorPage: React.FC = () => {
         >
           <DiscordIcon size={20} /> <span className="ml-2">Discord</span>
         </SecondaryButton>
-      </div>
+      </div> */}
     </div>
   );
 };

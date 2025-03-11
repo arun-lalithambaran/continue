@@ -84,7 +84,7 @@ export function AssistantSelectOptions({
         })}
       </div>
 
-      <div className="mt-auto w-full">
+      {/* <div className="mt-auto w-full">
         <OptionDiv key={profiles.length} onClick={onNewAssistant}>
           <div
             className="flex items-center py-0.5"
@@ -121,7 +121,7 @@ export function AssistantSelectOptions({
             </span>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

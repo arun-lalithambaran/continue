@@ -63,34 +63,6 @@ function MorePage() {
             />
 
             <MoreHelpRow
-              title="Have an issue?"
-              description="Let us know on GitHub and we'll do our best to resolve it"
-              Icon={ArrowTopRightOnSquareIcon}
-              onClick={() =>
-                ideMessenger.post(
-                  "openUrl",
-                  "https://github.com/continuedev/continue/issues/new/choose",
-                )
-              }
-            />
-
-            <MoreHelpRow
-              title="Join the community!"
-              description="Join us on Discord to stay up-to-date on the latest developments"
-              Icon={ArrowTopRightOnSquareIcon}
-              onClick={() =>
-                ideMessenger.post("openUrl", "https://discord.gg/vapESyrFmJ")
-              }
-            />
-
-            <MoreHelpRow
-              title="Token usage"
-              description="Daily token usage across models"
-              Icon={TableCellsIcon}
-              onClick={() => navigate("/stats")}
-            />
-
-            <MoreHelpRow
               title="Quickstart"
               description="Reopen the quickstart and tutorial file"
               Icon={DocumentArrowUpIcon}
