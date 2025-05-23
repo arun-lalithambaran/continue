@@ -1015,5 +1015,32 @@ To get started, [register](https://dataplatform.cloud.ibm.com/registration/stepo
       {...models.AUTODETECT}
     ],
     apiKeyUrl: "https://venice.ai/chat"
+  },
+  databricks: {
+    title: "Databricks",
+    provider: "databricks",
+    description: "Use LLMs deployed on the Databricks platform",
+    icon: "databricks.png", // Add an icon file to the assets folder
+    tags: [ModelProviderTags.RequiresApiKey],
+    longDescription:
+      "Configure your Databricks endpoint and API key to use models deployed on the Databricks platform.",
+    collectInputFor: [
+      {
+        inputType: "text",
+        key: "apiKey",
+        label: "API Key",
+        placeholder: "Enter your Databricks API key",
+        required: true,
+      },
+      {
+        inputType: "text",
+        key: "abiBase",
+        label: "Endpoint",
+        placeholder: "Enter your Databricks endpoint URL",
+        required: true,
+      },
+      ...completionParamsInputsConfigs,
+    ],
+    packages: [models.databricksClaude3Sonnet], // changed this line to use models import
   }
 };

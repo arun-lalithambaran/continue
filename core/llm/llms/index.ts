@@ -18,6 +18,7 @@ import BedrockImport from "./BedrockImport";
 import Cerebras from "./Cerebras";
 import Cloudflare from "./Cloudflare";
 import Cohere from "./Cohere";
+import DatabricksLLM from "./Databricks";
 import DeepInfra from "./DeepInfra";
 import Deepseek from "./Deepseek";
 import Docker from "./Docker";
@@ -118,6 +119,7 @@ export const LLMClasses = [
   Relace,
   Inception,
   Voyage,
+  DatabricksLLM,
 ];
 
 export async function llmFromDescription(

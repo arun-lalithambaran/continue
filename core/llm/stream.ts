@@ -112,3 +112,43 @@ export async function* streamJSON(response: Response): AsyncGenerator<any> {
     }
   }
 }
+export async function* streamDataBricksJSON(response: Response): AsyncGenerator<any> {
+  for await (const value of streamResponse(response)) {
+    const data = JSON.parse(value);
+    for (const choice of data.choices) {
+      yield choice.message;
+    }
+  }
+}
+
+export async function* streamDataBricksSse(response: Response): AsyncGenerator<any> {
+  let buffer = "";
+  for await (const value of streamResponse(response)) {
+    buffer += value;
+
+    let position: number;
+    while ((position = buffer.indexOf("\n")) >= 0) {
+      const line = buffer.slice(0, position);
+      buffer = buffer.slice(position + 1);
+
+      const { done, data } = parseSseLine(line);
+      if (done) {
+        break;
+      }
+      if (data) {
+        for (const choice of data.choices) {
+          yield choice.delta;
+        }
+      }
+    }
+  }
+
+  if (buffer.length > 0) {
+    const { done, data } = parseSseLine(buffer);
+    if (!done && data) {
+      for (const choice of data.choices) {
+        yield choice.delta;
+      }
+    }
+  }
+}

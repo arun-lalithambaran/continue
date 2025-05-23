@@ -1722,6 +1722,18 @@ export const models: { [key: string]: ModelPackage } = {
     providerOptions: ["sambanova"],
     isOpenSource: true,
   },
+  databricksClaude3Sonnet: {
+    title: "Databricks Claude 3 Sonnet",
+    description: "Claude 3 Sonnet model on Databricks",
+    params: {
+      title: "Databricks Claude 3 Sonnet",
+      model: "databricks", // Unique model identifier
+      contextLength: 200000, // Set an appropriate context length
+    },
+    icon: "deepseek.png", // Add an icon file to the assets folder if desired
+    providerOptions: ["databricks"],
+    isOpenSource: true, // Or true, depending on the model
+  },
   AUTODETECT: {
     title: "Autodetect",
     description:
