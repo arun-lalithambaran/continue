@@ -112,6 +112,31 @@ export const models: { [key: string]: ModelPackage } = {
     providerOptions: ["novita"],
     isOpenSource: true,
   },
+  databricksClaudeSonnet: {
+    title: "Databricks Claude 3 Sonnet",
+    description: "A model for coding tasks",
+    refUrl: "",
+    params: {
+      title: "databricks-claude-3-sonnet",
+      model: "databricks-claude-3-sonnet",
+      contextLength: 200000,
+    },
+    icon: "meta.png",
+    dimensions: [
+      {
+        name: "Parameter Count",
+        description: "The number of parameters in the model",
+        options: {
+          "35S": {
+            model: "databricks-claude-3-sonnet",
+            title: "databricks-claude-3-sonnet",
+          },
+        },
+      },
+    ],
+    providerOptions: ["databricks_api"],
+    isOpenSource: true,
+  },
   mistralChat: {
     title: "Mistral Chat",
     description:
