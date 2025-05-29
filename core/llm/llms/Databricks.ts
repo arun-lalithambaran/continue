@@ -1,4 +1,5 @@
-import { ChatMessage, CompletionOptions, LLMOptions } from "../../index.js";
+import { ChatMessage, CompletionOptions } from "../../index.js";
+import { renderChatMessage } from "../../util/messageContent.js";
 import { BaseLLM } from "../index.js";
 import { streamDataBricksJSON, streamDataBricksSse } from "../stream.js";
 
@@ -8,14 +9,9 @@ class DataBricks extends BaseLLM {
     static providerName = "databricks";
     stream = true;
 
-    static defaultOptions: Partial<LLMOptions> = {
-        apiBase: "",
-        apiKey: ""
-    };
-
     private _convertArgs(options: CompletionOptions) {
         const finalOptions = {
-            max_tokens: 128000,
+            max_tokens: options.maxTokens || this.contextLength,
             frequency_penalty: options.frequencyPenalty,
             presence_penalty: options.presencePenalty,
             min_p: options.minP,
@@ -28,6 +24,18 @@ class DataBricks extends BaseLLM {
 
         return finalOptions;
     }
+
+    protected async *_streamComplete(
+        prompt: string,
+        signal: AbortSignal,
+        options: CompletionOptions,
+    ): AsyncGenerator<string> {
+        const messages: ChatMessage[] = [{ role: "user", content: prompt }];
+        for await (const message of this._streamChat(messages, signal, options)) {
+            yield renderChatMessage(message);
+        }
+    }
+
     protected async *_streamChat(
         messages: ChatMessage[],
         signal: AbortSignal,
@@ -39,7 +47,7 @@ class DataBricks extends BaseLLM {
             ...this.requestOptions?.headers,
         };
 // https://dbc-6514b464-70a2.cloud.databricks.com/serving-endpoints/databricks-claude-3-7-sonnet/invocations
-        const resp = await this.fetch(new URL("serving-endpoints/databricks-claude-3-7-sonnet/invocations", this.apiBase), {
+        const resp = await this.fetch(new URL(`serving-endpoints/${this.model}/invocations`, this.apiBase), {
             method: "POST",
             headers,
             body: JSON.stringify({

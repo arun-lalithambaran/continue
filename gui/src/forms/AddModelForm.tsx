@@ -32,7 +32,7 @@ function AddModelForm({
   hideFreeTrialLimitMessage,
 }: QuickModelSetupProps) {
   const [selectedProvider, setSelectedProvider] = useState<ProviderInfo>(
-    providers["openai"]!,
+    providers["databricks"]!,
   );
   const dispatch = useAppDispatch();
   const { selectedProfile } = useAuth();
@@ -45,12 +45,13 @@ function AddModelForm({
   const ideMessenger = useContext(IdeMessengerContext);
 
   const popularProviderTitles = [
-    providers["openai"]?.title || "",
-    providers["anthropic"]?.title || "",
-    providers["mistral"]?.title || "",
-    providers["gemini"]?.title || "",
-    providers["azure"]?.title || "",
-    providers["ollama"]?.title || "",
+    providers["databricks"]?.title || "",
+    // providers["openai"]?.title || "",
+    // providers["anthropic"]?.title || "",
+    // providers["mistral"]?.title || "",
+    // providers["gemini"]?.title || "",
+    // providers["azure"]?.title || "",
+    // providers["ollama"]?.title || "",
   ];
 
   const allProviders = Object.entries(providers)
@@ -167,7 +168,7 @@ function AddModelForm({
                   }
                 }}
                 topOptions={popularProviders}
-                otherOptions={otherProviders}
+                // otherOptions={otherProviders}
               />
               <InputSubtext className="mb-0">
                 Don't see your provider?{" "}

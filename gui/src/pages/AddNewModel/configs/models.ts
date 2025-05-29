@@ -1727,12 +1727,24 @@ export const models: { [key: string]: ModelPackage } = {
     description: "Claude 3 Sonnet model on Databricks",
     params: {
       title: "Databricks Claude 3 Sonnet",
-      model: "databricks", // Unique model identifier
-      contextLength: 200000, // Set an appropriate context length
+      model: "databricks-claude-3-7-sonnet", // Unique model identifier
+      contextLength: 128000, // Set an appropriate context length
     },
     icon: "deepseek.png", // Add an icon file to the assets folder if desired
     providerOptions: ["databricks"],
-    isOpenSource: true, // Or true, depending on the model
+    isOpenSource: false, // Or true, depending on the model
+  },
+  databricksLlama4Maverick: {
+    title: "Databricks LLAMA 4 Maverick",
+    description: "LLAMA 4 Maverick model on Databricks",
+    params: {
+      title: "Databricks LLAMA 4 Maverick",
+      model: "databricks-llama-4-maverick", // Unique model identifier
+      contextLength: 8192, // Set an appropriate context length
+    },
+    icon: "deepseek.png", // Add an icon file to the assets folder if desired
+    providerOptions: ["databricks"],
+    isOpenSource: false, // Or true, depending on the model
   },
   AUTODETECT: {
     title: "Autodetect",
