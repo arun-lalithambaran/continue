@@ -24,7 +24,6 @@ import Deepseek from "./Deepseek";
 import Docker from "./Docker";
 import Fireworks from "./Fireworks";
 import Flowise from "./Flowise";
-import FreeTrial from "./FreeTrial";
 import FunctionNetwork from "./FunctionNetwork";
 import Gemini from "./Gemini";
 import Groq from "./Groq";
@@ -68,7 +67,6 @@ import xAI from "./xAI";
 export const LLMClasses = [
   Anthropic,
   Cohere,
-  FreeTrial,
   FunctionNetwork,
   Gemini,
   Llamafile,
