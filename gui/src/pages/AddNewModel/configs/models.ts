@@ -1692,7 +1692,19 @@ export const models: { [key: string]: ModelPackage } = {
     params: {
       title: "Databricks Claude 3 Sonnet",
       model: "databricks-claude-3-7-sonnet", // Unique model identifier
-      contextLength: 128000, // Set an appropriate context length
+      contextLength: 200_000, // Set an appropriate context length
+    },
+    icon: "deepseek.png", // Add an icon file to the assets folder if desired
+    providerOptions: ["databricks"],
+    isOpenSource: false, // Or true, depending on the model
+  },
+  databricksClaude4Sonnet: {
+    title: "Databricks Claude 4 Sonnet",
+    description: "Claude 4 Sonnet model on Databricks",
+    params: {
+      title: "Databricks Claude 4 Sonnet",
+      model: "databricks-claude-sonnet-4", // Unique model identifier
+      contextLength: 200_000, // Set an appropriate context length
     },
     icon: "deepseek.png", // Add an icon file to the assets folder if desired
     providerOptions: ["databricks"],
@@ -1704,9 +1716,9 @@ export const models: { [key: string]: ModelPackage } = {
     params: {
       title: "Databricks LLAMA 4 Maverick",
       model: "databricks-llama-4-maverick", // Unique model identifier
-      contextLength: 8192, // Set an appropriate context length
+      contextLength: 16_000, // Set an appropriate context length
     },
-    icon: "deepseek.png", // Add an icon file to the assets folder if desired
+    icon: "meta.png", // Add an icon file to the assets folder if desired
     providerOptions: ["databricks"],
     isOpenSource: false, // Or true, depending on the model
   },

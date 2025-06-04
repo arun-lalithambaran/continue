@@ -991,7 +991,7 @@ To get started, [register](https://dataplatform.cloud.ibm.com/registration/stepo
     title: "Databricks",
     provider: "databricks",
     description: "Use LLMs deployed on the Databricks platform",
-    icon: "llamafile.png", // Add an icon file to the assets folder
+    icon: "anthropic.png", // Add an icon file to the assets folder
     tags: [ModelProviderTags.RequiresApiKey],
     longDescription:
       "Configure your Databricks endpoint and API key to use models deployed on the Databricks platform.",
@@ -1012,6 +1012,6 @@ To get started, [register](https://dataplatform.cloud.ibm.com/registration/stepo
     ],
     downloadUrl: "https://feathersoft.com",
     apiKeyUrl: "https://feathersoft.com",
-    packages: [models.databricksClaude3Sonnet, models.databricksLlama4Maverick], // changed this line to use models import
+    packages: [models.databricksClaude4Sonnet, models.databricksClaude3Sonnet, models.databricksLlama4Maverick], // changed this line to use models import
   }
 };

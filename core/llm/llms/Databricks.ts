@@ -11,15 +11,15 @@ class DataBricks extends BaseLLM {
 
     private _convertArgs(options: CompletionOptions) {
         const finalOptions = {
-            max_tokens: options.maxTokens || this.contextLength,
+            max_tokens: options.maxTokens,
             frequency_penalty: options.frequencyPenalty,
             presence_penalty: options.presencePenalty,
             min_p: options.minP,
             mirostat: options.mirostat,
             stop: options.stop,
             top_k: options.topK,
-            top_p: 0.9,
-            temperature: 0.7
+            top_p: options.topP,
+            temperature: options.temperature,
         };
 
         return finalOptions;
