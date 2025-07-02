@@ -61,6 +61,7 @@ const PROVIDER_HANDLES_TEMPLATING: string[] = [
   "watsonx",
   "nebius",
   "relace",
+  "databricks"
 ];
 
 const PROVIDER_SUPPORTS_IMAGES: string[] = [
@@ -82,6 +83,7 @@ const PROVIDER_SUPPORTS_IMAGES: string[] = [
   "nebius",
   "ovhcloud",
   "watsonx",
+  "databricks"
 ];
 
 const MODEL_SUPPORTS_IMAGES: string[] = [
@@ -104,6 +106,7 @@ const MODEL_SUPPORTS_IMAGES: string[] = [
   "llama-3.2",
   "llama4",
   "granite-vision",
+  "databricks-claude-3-7-sonnet"
 ];
 
 function modelSupportsTools(modelDescription: ModelDescription) {
@@ -393,5 +396,6 @@ export {
   autodetectTemplateType,
   llmCanGenerateInParallel,
   modelSupportsImages,
-  modelSupportsTools,
+  modelSupportsTools
 };
+
