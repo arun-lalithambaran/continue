@@ -164,6 +164,7 @@ const PARALLEL_PROVIDERS: string[] = [
   "vertexai",
   "function-network",
   "scaleway",
+  "databricks" // Added databricks for agent mode support
 ];
 
 function llmCanGenerateInParallel(provider: string, model: string): boolean {
