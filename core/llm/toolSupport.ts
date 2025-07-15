@@ -33,6 +33,22 @@ export const PROVIDER_TOOL_SUPPORT: Record<string, (model: string) => boolean> =
         "claude-3-7",
         "claude-3.7",
         "claude-sonnet-4",
+        "claude-4-sonnet",
+        "gpt-4",
+        "o3",
+        "gemini",
+        "claude-opus-4",
+      ].some((part) => model.toLowerCase().startsWith(part));
+  },
+  anthropic: (model) => {
+    if (
+      [
+        "claude-3-5",
+        "claude-3.5",
+        "claude-3-7",
+        "claude-3.7",
+        "claude-sonnet-4",
+        "claude-4-sonnet",
         "claude-opus-4",
       ].some((part) => model.toLowerCase().startsWith(part))
     ) {
@@ -258,28 +274,49 @@ export const PROVIDER_TOOL_SUPPORT: Record<string, (model: string) => boolean> =
       }
     }
 
-    const specificModels = [
-      "qwen/qwq-32b",
-      "qwen/qwen-2.5-72b-instruct",
-      "meta-llama/llama-3.2-3b-instruct",
-      "meta-llama/llama-3-8b-instruct",
-      "meta-llama/llama-3-70b-instruct",
-      "arcee-ai/caller-large",
-      "nousresearch/hermes-3-llama-3.1-70b",
-    ];
-    for (const model of specificModels) {
-      if (model.toLowerCase() === model) {
-        return true;
-      }
-    }
-
-    const supportedContains = ["llama-3.1"];
-    for (const model of supportedContains) {
-      if (model.toLowerCase().includes(model)) {
-        return true;
-      }
-    }
-
     return false;
   },
+  cohere: (model) => {
+    return model.toLowerCase().startsWith("command");
+  },
+  gemini: (model) => {
+    // All gemini models support function calling
+    return model.toLowerCase().includes("gemini");
+  },
+  vertexai: (model) => {
+    // All gemini models except flash 2.0 lite support function calling
+    return (
+      model.toLowerCase().includes("gemini") &&
+      !model.toLowerCase().includes("lite")
+    );
+  },
+  bedrock: (model) => {
+    if (
+      [
+        "claude-3-5-sonnet",
+        "claude-3.5-sonnet",
+        "claude-3-7-sonnet",
+        "claude-3.7-sonnet",
+        "claude-sonnet-4",
+        "claude-4-sonnet",
+        "claude-opus-4",
+        "nova-lite",
+        "nova-pro",
+        "nova-micro",
+        "nova-premier",
+      ].some((part) => model.toLowerCase().includes(part))
+    ) {
+      return true;
+    }
+  }
+
+    const supportedContains = ["llama-3.1"];
+  for(const model of supportedContains) {
+    if (model.toLowerCase().includes(model)) {
+      return true;
+    }
+  }
+
+    return false;
+},
 };
