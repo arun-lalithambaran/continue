@@ -995,7 +995,7 @@ To get started, [register](https://dataplatform.cloud.ibm.com/registration/stepo
       },
     ],
     packages: [
-      {...models.AUTODETECT}
+      { ...models.AUTODETECT }
     ],
     apiKeyUrl: "https://venice.ai/chat"
   },
@@ -1010,7 +1010,7 @@ To get started, [register](https://dataplatform.cloud.ibm.com/registration/stepo
     collectInputFor: [
       ...completionParamsInputsConfigs,
       {
-        ...apiBaseInput, 
+        ...apiBaseInput,
         defaultValue: "https://dbc-6514b464-70a2.cloud.databricks.com",
         required: true
       },
@@ -1025,5 +1025,33 @@ To get started, [register](https://dataplatform.cloud.ibm.com/registration/stepo
     downloadUrl: "https://feathersoft.com",
     apiKeyUrl: "https://feathersoft.com",
     packages: [models.databricksClaude4Sonnet, models.databricksClaude3Sonnet, models.databricksLlama4Maverick], // changed this line to use models import
+  },
+  databricksReranker: {
+    title: "Databricks Reranker",
+    provider: "databricksReranker",
+    description: "Use a self-hosted reranking model deployed on Databricks to improve search results",
+    icon: "databricks.png", // Use the same icon as Databricks
+    tags: [ModelProviderTags.RequiresApiKey],
+    longDescription:
+      "Configure your Databricks reranker endpoint and API key to use your custom reranking model deployed on the Databricks platform.",
+    collectInputFor: [
+      {
+        inputType: "text",
+        key: "apiBase",
+        label: "API Base",
+        placeholder: "e.g. https://dbc-6514b464-70a2.cloud.databricks.com",
+        defaultValue: "https://dbc-6514b464-70a2.cloud.databricks.com",
+        required: true,
+      },
+      {
+        inputType: "text",
+        key: "apiKey",
+        label: "API Key",
+        placeholder: "Enter your Databricks API key",
+        required: true,
+      },
+    ],
+    packages: [models.databricksReranker],
+    apiKeyUrl: "https://docs.databricks.com/en/dev-tools/auth.html#token-management",
   }
 };

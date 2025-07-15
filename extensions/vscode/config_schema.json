@@ -2981,6 +2981,7 @@
                 "bedrock",
                 "cohere",
                 "voyage",
+                "databricksReranker",
                 "watsonx",
                 "llm",
                 "huggingface-tei",

@@ -42,6 +42,7 @@ export function AddModelForm({
 
   const popularProviderTitles = [
     providers["databricks"]?.title || "",
+    providers["databricksReranker"]?.title || ""
     // providers["openai"]?.title || "",
     // providers["anthropic"]?.title || "",
     // providers["mistral"]?.title || "",

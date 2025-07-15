@@ -1848,6 +1848,18 @@ export const models: { [key: string]: ModelPackage } = {
     providerOptions: ["databricks"],
     isOpenSource: false, // Or true, depending on the model
   },
+  databricksReranker: {
+    title: "Databricks Reranker",
+    description: "Self-hosted reranking model on Databricks for improved search results",
+    params: {
+      title: "Databricks Reranker",
+      model: "reranking_modeltest",
+      contextLength: 4096,
+    },
+    icon: "databricks.png", // You may need to add this icon to your assets folder
+    providerOptions: ["databricksReranker"],
+    isOpenSource: false,
+  },
   AUTODETECT: {
     title: "Autodetect",
     description:

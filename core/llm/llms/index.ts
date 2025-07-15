@@ -19,6 +19,7 @@ import Cerebras from "./Cerebras";
 import Cloudflare from "./Cloudflare";
 import Cohere from "./Cohere";
 import DatabricksLLM from "./Databricks";
+import DatabricksReranker from "./DatabricksReranker";
 import DeepInfra from "./DeepInfra";
 import Deepseek from "./Deepseek";
 import Docker from "./Docker";
@@ -118,6 +119,7 @@ export const LLMClasses = [
   Inception,
   Voyage,
   DatabricksLLM,
+  DatabricksReranker,
   LlamaStack
 ];
 

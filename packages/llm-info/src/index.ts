@@ -2,6 +2,8 @@ import { Anthropic } from "./providers/anthropic.js";
 import { Azure } from "./providers/azure.js";
 import { Bedrock } from "./providers/bedrock.js";
 import { Cohere } from "./providers/cohere.js";
+import { Databricks } from "./providers/databricks.js";
+import { DatabricksReranker } from "./providers/databricksReranker.js";
 import { Gemini } from "./providers/gemini.js";
 import { Mistral } from "./providers/mistral.js";
 import { Ollama } from "./providers/ollama.js";
@@ -23,6 +25,8 @@ export const allModelProviders: ModelProvider[] = [
   Bedrock,
   Cohere,
   xAI,
+  Databricks,
+  DatabricksReranker
 ];
 
 export const allLlms: LlmInfo[] = allModelProviders.flatMap((provider) =>

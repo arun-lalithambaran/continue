@@ -115,7 +115,7 @@ const embeddingsProviderSchema = z.object({
 });
 
 const rerankerSchema = z.object({
-  name: z.enum(["cohere", "voyage", "llm", "watsonx"]),
+  name: z.enum(["cohere", "voyage", "databricksReranker", "llm", "watsonx"]),
   params: z.record(z.any()).optional(),
 });
 
