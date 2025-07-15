@@ -34,21 +34,6 @@ export const PROVIDER_TOOL_SUPPORT: Record<string, (model: string) => boolean> =
         "claude-3.7",
         "claude-sonnet-4",
         "claude-4-sonnet",
-        "gpt-4",
-        "o3",
-        "gemini",
-        "claude-opus-4",
-      ].some((part) => model.toLowerCase().startsWith(part));
-  },
-  anthropic: (model) => {
-    if (
-      [
-        "claude-3-5",
-        "claude-3.5",
-        "claude-3-7",
-        "claude-3.7",
-        "claude-sonnet-4",
-        "claude-4-sonnet",
         "claude-opus-4",
       ].some((part) => model.toLowerCase().startsWith(part))
     ) {
