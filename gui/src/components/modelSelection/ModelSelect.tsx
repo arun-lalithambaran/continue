@@ -11,7 +11,6 @@ import { useAuth } from "../../context/Auth";
 import { IdeMessengerContext } from "../../context/IdeMessenger";
 import { AddModelForm } from "../../forms/AddModelForm";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { EMPTY_CONFIG } from "../../redux/slices/configSlice";
 import { setDialogMessage, setShowDialog } from "../../redux/slices/uiSlice";
 import { updateSelectedModelByRole } from "../../redux/thunks/updateSelectedModelByRole";
 import {
@@ -38,6 +37,7 @@ interface Option {
   title: string;
   apiKey?: string;
   sourceFile?: string;
+  isAutoDetected?: boolean;
 }
 
 function modelSelectTitle(model: any): string {
@@ -76,8 +76,15 @@ function ModelOption({
           <CubeIcon className="h-3 w-3 flex-shrink-0" />
           <span className="line-clamp-1">
             {option.title}
+            {option.isAutoDetected && (
+              <span className="text-description-muted ml-1.5 text-[10px] italic">
+                (autodetected)
+              </span>
+            )}
             {showMissingApiKeyMsg && (
-              <span className="ml-2 text-[10px] italic">(Missing API key)</span>
+              <span className="ml-1.5 text-[10px] italic">
+                (Missing API key)
+              </span>
             )}
           </span>
         </div>
@@ -94,6 +101,7 @@ function ModelSelect() {
 
   const isInEdit = useAppSelector((store) => store.session.isInEdit);
   const config = useAppSelector((state) => state.config.config);
+  const isConfigLoading = useAppSelector((state) => state.config.loading);
   const ideMessenger = useContext(IdeMessengerContext);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [options, setOptions] = useState<Option[]>([]);
@@ -132,10 +140,11 @@ function ModelSelect() {
           title: modelSelectTitle(model),
           apiKey: model.apiKey,
           sourceFile: model.sourceFile,
+          isAutoDetected: model.isFromAutoDetect,
         };
       }),
     );
-  }, [config]);
+  }, [allModels]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -192,7 +201,6 @@ function ModelSelect() {
     );
   }
 
-  const isConfigLoading = config === EMPTY_CONFIG;
   const hasNoModels = allModels?.length === 0;
 
   return (

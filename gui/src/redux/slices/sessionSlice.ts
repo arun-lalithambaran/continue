@@ -784,6 +784,9 @@ export const sessionSlice = createSlice({
         applyState.status = payload.status ?? applyState.status;
         applyState.numDiffs = payload.numDiffs ?? applyState.numDiffs;
         applyState.filepath = payload.filepath ?? applyState.filepath;
+        applyState.fileContent = payload.fileContent ?? applyState.fileContent;
+        applyState.originalFileContent =
+          payload.originalFileContent ?? applyState.originalFileContent;
       }
 
       if (payload.status === "done") {
@@ -844,6 +847,21 @@ export const sessionSlice = createSlice({
         toolItem.contextItems = action.payload.contextItems.map((item) =>
           toolCallCtxItemToCtxItemWithId(item, action.payload.toolCallId),
         );
+      }
+    },
+    setToolCallArgs: (
+      state,
+      action: PayloadAction<{
+        toolCallId: string;
+        newArgs: Record<string, any>;
+      }>,
+    ) => {
+      const toolCallState = findToolCallById(
+        state.history,
+        action.payload.toolCallId,
+      );
+      if (toolCallState) {
+        toolCallState.parsedArgs = action.payload.newArgs;
       }
     },
     cancelToolCall: (
@@ -1021,6 +1039,7 @@ export const {
   acceptToolCall,
   setToolGenerated,
   updateToolCallOutput,
+  setToolCallArgs,
   setMode,
   setIsSessionMetadataLoading,
   setAllSessionMetadata,

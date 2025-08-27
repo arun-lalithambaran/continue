@@ -1,6 +1,7 @@
 const DEFAULT_MAX_TOKENS = 4096;
 const DEFAULT_CONTEXT_LENGTH = 32_768;
 const DEFAULT_TEMPERATURE = 0.5;
+const DEFAULT_PRUNING_LENGTH = 128000;
 
 const DEFAULT_ARGS = {
   maxTokens: DEFAULT_MAX_TOKENS,
@@ -18,11 +19,17 @@ export enum LLMConfigurationStatuses {
   MISSING_ENV_SECRET = "missing-env-secret",
 }
 
+export enum NEXT_EDIT_MODELS {
+  MERCURY_CODER = "mercury-coder",
+  INSTINCT = "instinct",
+}
+
 export {
   DEFAULT_ARGS,
   DEFAULT_CONTEXT_LENGTH,
   DEFAULT_MAX_BATCH_SIZE,
   DEFAULT_MAX_CHUNK_SIZE,
   DEFAULT_MAX_TOKENS,
+  DEFAULT_PRUNING_LENGTH,
   PROXY_URL,
 };
