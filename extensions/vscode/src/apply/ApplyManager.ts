@@ -29,13 +29,6 @@ export class ApplyManager {
     toolCallId,
     isSearchAndReplace,
   }: ApplyToFilePayload) {
-    await this.webviewProtocol.request("updateApplyState", {
-      streamId,
-      status: "streaming",
-      fileContent: text,
-      toolCallId,
-    });
-
     if (filepath) {
       await this.ensureFileOpen(filepath);
     }
@@ -46,8 +39,18 @@ export class ApplyManager {
       return;
     }
 
-    const hasExistingDocument = !!activeTextEditor.document.getText().trim();
+    // Capture the original file content before applying changes
+    const originalFileContent = activeTextEditor.document.getText();
 
+    await this.webviewProtocol.request("updateApplyState", {
+      streamId,
+      status: "streaming",
+      fileContent: text,
+      originalFileContent,
+      toolCallId,
+    });
+
+    const hasExistingDocument = !!activeTextEditor.document.getText().trim();
     if (hasExistingDocument) {
       // Currently `isSearchAndReplace` will always provide a full file rewrite
       // as the contents of `text`, so we can just instantly apply

@@ -1,5 +1,6 @@
 package com.github.continuedev.continueintellijextension.`continue`
 
+import com.github.continuedev.continueintellijextension.browser.ContinueBrowserService.Companion.getBrowser
 import com.github.continuedev.continueintellijextension.constants.MessageTypes
 import com.github.continuedev.continueintellijextension.`continue`.process.ContinueBinaryProcess
 import com.github.continuedev.continueintellijextension.`continue`.process.ContinueProcessHandler
@@ -17,12 +18,12 @@ class CoreMessenger(
     private val project: Project,
     private val ideProtocolClient: IdeProtocolClient,
     val coroutineScope: CoroutineScope,
-    private val onExit: () -> Unit
+    private val onUnexpectedExit: () -> Unit
 ) {
     private val gson = Gson()
     private val responseListeners = mutableMapOf<String, (Any?) -> Unit>()
-    private val process = startContinueProcess()
-    private val log = Logger.getInstance(CoreMessenger::class.java)
+    private var process = startContinueProcess()
+    private val log = Logger.getInstance(CoreMessenger::class.java.simpleName)
 
     fun request(messageType: String, data: Any?, messageId: String?, onResponse: (Any?) -> Unit) {
         val id = messageId ?: uuid()
@@ -36,7 +37,7 @@ class CoreMessenger(
         val process = if (isTcp)
             ContinueSocketProcess()
         else
-            ContinueBinaryProcess(onExit)
+            ContinueBinaryProcess(onUnexpectedExit)
         return ContinueProcessHandler(coroutineScope, process, ::handleMessage)
     }
 
@@ -56,9 +57,7 @@ class CoreMessenger(
 
         // Forward to webview
         if (messageType in MessageTypes.PASS_THROUGH_TO_WEBVIEW) {
-            val continuePluginService = project.service<ContinuePluginService>()
-            // todo: is this a bug below (messageType = ID)? verify
-            continuePluginService.sendToWebview(messageType, responseMap["data"], messageType)
+            project.getBrowser()?.sendToWebview(messageType, responseMap["data"], messageId)
         }
 
         // Responses for messageId
@@ -81,7 +80,15 @@ class CoreMessenger(
             null
         }
 
-    fun killSubProcess() {
+    fun restart() {
+        log.warn("Restarting Continue process")
+        responseListeners.clear()
+        process.close()
+        process = startContinueProcess()
+    }
+
+    fun close() {
+        log.warn("Closing Continue process")
         process.close()
     }
 }
