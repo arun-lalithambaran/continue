@@ -19,9 +19,13 @@ import {
 } from "../redux/slices/sessionSlice";
 import { setTTSActive } from "../redux/slices/uiSlice";
 
+import { modelSupportsReasoning } from "core/llm/autodetect";
 import { cancelStream } from "../redux/thunks/cancelStream";
 import { handleApplyStateUpdate } from "../redux/thunks/handleApplyStateUpdate";
-import { refreshSessionMetadata } from "../redux/thunks/session";
+import {
+  loadLastSession,
+  refreshSessionMetadata,
+} from "../redux/thunks/session";
 import { updateFileSymbolsFromHistory } from "../redux/thunks/updateFileSymbols";
 import {
   setDocumentStylesFromLocalStorage,
@@ -79,12 +83,13 @@ function ParallelListeners() {
         document.body.style.fontSize = `${configResult.config.ui.fontSize}px`;
       }
 
-      if (
-        configResult.config?.selectedModelByRole.chat?.completionOptions
-          ?.reasoning
-      ) {
-        dispatch(setHasReasoningEnabled(true));
-      }
+      const chatModel = configResult.config?.selectedModelByRole.chat;
+      const supportsReasoning = modelSupportsReasoning(chatModel);
+      const isReasoningDisabled =
+        chatModel?.completionOptions?.reasoning === false;
+      dispatch(
+        setHasReasoningEnabled(supportsReasoning && !isReasoningDisabled),
+      );
     },
     [dispatch, hasDoneInitialConfigLoad],
   );
@@ -102,6 +107,7 @@ function ParallelListeners() {
         await handleConfigUpdate(true, result.content);
       }
       dispatch(setConfigLoading(false));
+      await dispatch(loadLastSession());
     }
     void initialLoadConfig();
     const interval = setInterval(() => {

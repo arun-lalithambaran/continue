@@ -17,6 +17,7 @@ import BedrockImport from "./BedrockImport";
 import Cerebras from "./Cerebras";
 import Cloudflare from "./Cloudflare";
 import Cohere from "./Cohere";
+import CometAPI from "./CometAPI";
 import DatabricksLLM from "./Databricks";
 import DeepInfra from "./DeepInfra";
 import Deepseek from "./Deepseek";
@@ -31,6 +32,7 @@ import HuggingFaceTEIEmbeddingsProvider from "./HuggingFaceTEI";
 import HuggingFaceTGI from "./HuggingFaceTGI";
 import Inception from "./Inception";
 import Kindo from "./Kindo";
+import Lemonade from "./Lemonade";
 import LlamaCpp from "./LlamaCpp";
 import Llamafile from "./Llamafile";
 import LlamaStack from "./LlamaStack";
@@ -54,6 +56,7 @@ import SambaNova from "./SambaNova";
 import Scaleway from "./Scaleway";
 import SiliconFlow from "./SiliconFlow";
 import ContinueProxy from "./stubs/ContinueProxy";
+import TARS from "./TARS";
 import TestLLM from "./Test";
 import TextGenWebUI from "./TextGenWebUI";
 import Together from "./Together";
@@ -66,6 +69,7 @@ import xAI from "./xAI";
 export const LLMClasses = [
   Anthropic,
   Cohere,
+  CometAPI,
   FunctionNetwork,
   Gemini,
   Llamafile,
@@ -82,6 +86,7 @@ export const LLMClasses = [
   LlamaCpp,
   OpenAI,
   OVHcloud,
+  Lemonade,
   LMStudio,
   Mistral,
   Bedrock,
@@ -117,7 +122,8 @@ export const LLMClasses = [
   Inception,
   Voyage,
   DatabricksLLM,
-  LlamaStack
+  LlamaStack,
+  TARS,
 ];
 
 export async function llmFromDescription(
