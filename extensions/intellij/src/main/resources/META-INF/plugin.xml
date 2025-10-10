@@ -151,9 +151,9 @@
         <action id="continue.openConfigPage"
                 class="com.github.continuedev.continueintellijextension.actions.OpenConfigAction"
                 icon="AllIcons.General.GearPlain"
-                text="Continue Config"
-                description="Continue Config">
-            <override-text place="GoToAction" text="Continue Config"/>
+                text="Settings"
+                description="Settings">
+            <override-text place="GoToAction" text="Settings"/>
         </action>
 
         <action id="continue.openLogs"
@@ -181,5 +181,12 @@
             <add-to-group group-id="EditorPopupMenu"/>
             <override-text place="GoToAction" text="Continue: Add Highlighted Code to Context and Clear Chat"/>
         </action>
+        <group id="ContinueProjectViewPopUpMenuGroup" popup="true" text="Continue" icon="/icons/continue.svg">
+            <action id="com.github.continuedev.continueintellijextension.actions.AddToChatAction"
+                    class="com.github.continuedev.continueintellijextension.actions.AddToChatAction"
+                    text="Add to Chat">
+            </action>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+        </group>
     </actions>
 </idea-plugin>

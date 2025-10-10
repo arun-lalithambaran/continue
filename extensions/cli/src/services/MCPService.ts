@@ -1,6 +1,16 @@
 import { type AssistantConfig } from "@continuedev/sdk";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import {
+  SSEClientTransport,
+  SseError,
+} from "@modelcontextprotocol/sdk/client/sse.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import {
+  HttpMcpServer,
+  SseMcpServer,
+  StdioMcpServer,
+} from "node_modules/@continuedev/config-yaml/dist/schemas/mcp/index.js";
 
 import { getErrorString } from "../util/error.js";
 import { logger } from "../util/logger.js";
@@ -9,10 +19,18 @@ import { BaseService, ServiceWithDependencies } from "./BaseService.js";
 import { serviceContainer } from "./ServiceContainer.js";
 import {
   MCPConnectionInfo,
+  MCPServerConfig,
   MCPServiceState,
   SERVICE_NAMES,
-  MCPServerConfig,
 } from "./types.js";
+
+function is401Error(error: unknown) {
+  return (
+    (error instanceof SseError && error.code === 401) ||
+    (error instanceof Error && error.message.includes("401")) ||
+    (error instanceof Error && error.message.includes("Unauthorized"))
+  );
+}
 
 interface ServerConnection extends MCPConnectionInfo {
   client: Client | null;
@@ -214,38 +232,7 @@ export class MCPService
     this.updateState();
 
     try {
-      if (serverConfig.type && serverConfig.type !== "stdio") {
-        throw new Error(
-          `${serverConfig.type} MCP servers are not yet supported in the Continue CLI`,
-        );
-      }
-      if (!serverConfig.command) {
-        throw new Error("MCP server command is not specified");
-      }
-
-      const client = new Client(
-        { name: "continue-cli-client", version: "1.0.0" },
-        { capabilities: {} },
-      );
-
-      const env: Record<string, string> = serverConfig.env || {};
-      if (process.env.PATH !== undefined) {
-        env.PATH = process.env.PATH;
-      }
-
-      const transport = new StdioClientTransport({
-        command: serverConfig.command,
-        args: serverConfig.args,
-        env,
-        stderr: "ignore",
-      });
-
-      logger.debug("Connecting to MCP server", {
-        name: serverName,
-        command: serverConfig.command,
-      });
-
-      await client.connect(transport, {});
+      const client = await this.getConnectedClient(serverConfig);
 
       connection.client = client;
       connection.status = "connected";
@@ -362,5 +349,140 @@ export class MCPService
     this.removeAllListeners();
     logger.debug("Shutting down MCPService");
     await this.shutdownConnections();
+  }
+
+  /**
+   * Construct transport based on server configuration and connect client
+   */
+  private async getConnectedClient(
+    serverConfig: MCPServerConfig,
+  ): Promise<Client> {
+    const client = new Client(
+      { name: "continue-cli-client", version: "1.0.0" },
+      { capabilities: {} },
+    );
+
+    if ("command" in serverConfig) {
+      // STDIO: no need to check type, just if command is present
+      logger.debug("Connecting to MCP server", {
+        name: serverConfig.name,
+        command: serverConfig.command,
+      });
+      const transport = this.constructStdioTransport(serverConfig);
+      await client.connect(transport, {});
+    } else {
+      // SSE/HTTP: if type isn't explicit: try http and fall back to sse
+      logger.debug("Connecting to MCP server", {
+        name: serverConfig.name,
+        url: serverConfig.url,
+      });
+
+      try {
+        if (serverConfig.type === "sse") {
+          const transport = this.constructSseTransport(serverConfig);
+          await client.connect(transport, {});
+        } else if (serverConfig.type === "streamable-http") {
+          const transport = this.constructHttpTransport(serverConfig);
+          await client.connect(transport, {});
+        }
+      } catch (error: unknown) {
+        // on authorization error, use "mcp-remote" with stdio transport to connect
+        if (is401Error(error)) {
+          const transport = this.constructStdioTransport({
+            name: serverConfig.name,
+            command: "npx",
+            args: ["-y", "mcp-remote", serverConfig.url],
+          });
+          await client.connect(transport, {});
+        } else {
+          throw error;
+        }
+      }
+
+      if (typeof serverConfig.type === "undefined") {
+        try {
+          const transport = this.constructHttpTransport(serverConfig);
+          await client.connect(transport, {});
+        } catch {
+          logger.debug(
+            "MCP Connection: http connection failed, falling back to sse connection",
+            {
+              name: serverConfig.name,
+            },
+          );
+          try {
+            const transport = this.constructSseTransport(serverConfig);
+            await client.connect(transport, {});
+          } catch (e) {
+            throw new Error(
+              `MCP config with URL and no type specified failed both SSE and HTTP connection: ${e instanceof Error ? e.message : String(e)}`,
+            );
+          }
+        }
+      } else if (
+        !["streamable-http", "sse", "stdio"].includes(serverConfig.type)
+      ) {
+        throw new Error(`Unsupported transport type: ${serverConfig.type}`);
+      }
+    }
+
+    return client;
+  }
+
+  private constructSseTransport(
+    serverConfig: SseMcpServer,
+  ): SSEClientTransport {
+    // Merge apiKey into headers if provided
+    const headers = {
+      ...serverConfig.requestOptions?.headers,
+      ...(serverConfig.apiKey && {
+        Authorization: `Bearer ${serverConfig.apiKey}`,
+      }),
+    };
+
+    return new SSEClientTransport(new URL(serverConfig.url), {
+      eventSourceInit: {
+        fetch: (input, init) =>
+          fetch(input, {
+            ...init,
+            headers: {
+              ...init?.headers,
+              ...headers,
+            },
+          }),
+      },
+      requestInit: { headers },
+    });
+  }
+  private constructHttpTransport(
+    serverConfig: HttpMcpServer,
+  ): StreamableHTTPClientTransport {
+    // Merge apiKey into headers if provided
+    const headers = {
+      ...serverConfig.requestOptions?.headers,
+      ...(serverConfig.apiKey && {
+        Authorization: `Bearer ${serverConfig.apiKey}`,
+      }),
+    };
+
+    return new StreamableHTTPClientTransport(new URL(serverConfig.url), {
+      requestInit: { headers },
+    });
+  }
+  private constructStdioTransport(
+    serverConfig: StdioMcpServer,
+  ): StdioClientTransport {
+    const env: Record<string, string> = serverConfig.env || {};
+    if (process.env.PATH !== undefined) {
+      env.PATH = process.env.PATH;
+    }
+
+    return new StdioClientTransport({
+      command: serverConfig.command,
+      args: serverConfig.args || [],
+      env,
+      cwd: serverConfig.cwd,
+      stderr: "ignore",
+    });
   }
 }
